@@ -36,6 +36,18 @@ class MoviesController < ApplicationController
     @movies = Movie.find_all_by_rating(@selected_ratings.keys, ordering)
   end
 
+  def similar
+      id = params[:id]
+      @movie = Movie.find(id)
+
+        if @movie.director.to_s.empty?
+           flash[:notice] = "'#{@movie.title}' has no director info"
+           redirect_to movies_path and return
+        else
+            @movies = Movie.find_same_director(@movie.director)
+        end
+     
+end
   def new
     # default: render 'new' template
   end
